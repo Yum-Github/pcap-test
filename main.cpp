@@ -43,29 +43,29 @@ int main(int argc, char* argv[]) {
 
         if ((ntohs((*eth).ether_type) == ETHERTYPE_IP)&&((*ip).ip_p == IPPROTO_TCP))
         {
-        printf("\n\nDst mac = %02x : %02x : %02x : %02x : %02x : %02x\n",
+            printf("\n\nDst mac = %02x : %02x : %02x : %02x : %02x : %02x\n",
                    (*eth).ether_dhost[0], (*eth).ether_dhost[1], (*eth).ether_dhost[2],
-                   (*eth).ether_dhost[3], (*eth).ether_dhost[4], (*eth).ether_dhost[5]);
-        printf("Src mac = %02x : %02x : %02x : %02x : %02x : %02x\n",
+                    (*eth).ether_dhost[3], (*eth).ether_dhost[4], (*eth).ether_dhost[5]);
+            printf("Src mac = %02x : %02x : %02x : %02x : %02x : %02x\n",
                    (*eth).ether_shost[0], (*eth).ether_shost[1], (*eth).ether_shost[2],
-                   (*eth).ether_shost[3], (*eth).ether_shost[4], (*eth).ether_shost[5]);
+                    (*eth).ether_shost[3], (*eth).ether_shost[4], (*eth).ether_shost[5]);
 
-        printf("Dst IP = %u . %u . %u . %u\n",
+            printf("Dst IP = %u . %u . %u . %u\n",
                    (*ip).dst_IP[0], (*ip).dst_IP[1], (*ip).dst_IP[2], (*ip).dst_IP[3]);
-        printf("Src IP = %u . %u . %u . %u\n",
+            printf("Src IP = %u . %u . %u . %u\n",
                    (*ip).src_IP[0], (*ip).src_IP[1], (*ip).src_IP[2], (*ip).src_IP[3]);
 
-        printf("Dst Port = %u\n", ntohs((*tcp).th_dport));
-        printf("Src Port = %u\n", ntohs((*tcp).th_sport));
+            printf("Dst Port = %u\n", ntohs((*tcp).th_dport));
+            printf("Src Port = %u\n", ntohs((*tcp).th_sport));
 
-        uint8_t data = ntohs((*ip).ip_len) - ((*ip).ip_hl*4) - ((*tcp).th_off*4);
-        const u_char *payload = packet + sizeof(ethernet_mac) + (*ip).ip_hl*4 + (*tcp).th_off*4;
-        if(data >=1)
-        {
-            for(int i=1;i<=16;i++){
+            uint8_t data = ntohs((*ip).ip_len) - ((*ip).ip_hl*4) - ((*tcp).th_off*4);
+            const u_char *payload = packet + sizeof(ethernet_mac) + (*ip).ip_hl*4 + (*tcp).th_off*4;
+            for(int i=1; i<=data; i++){
                 printf(" %02x ", payload[i]);
+                payload++;
+                if(i>=16)
+                    break;
             }
-        }
         }
     }
     pcap_close(handle);
