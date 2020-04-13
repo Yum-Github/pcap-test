@@ -62,7 +62,7 @@ int main(int argc, char* argv[]) {
             const u_char *payload = packet + sizeof(ethernet_mac) + (*ip).ip_hl*4 + (*tcp).th_off*4;
             for(int i=0; i<=data; i++){
                 printf(" %02x ", payload[i]);
-                if(i>=16)
+                if(i>=15)
                     break;
             }
         }
