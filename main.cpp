@@ -30,16 +30,13 @@ int main(int argc, char* argv[]) {
             break;
         }
         typedef struct libnet_ethernet_hdr ethernet_mac;
-        ethernet_mac *eth;
-        eth = (ethernet_mac*)packet;
+        ethernet_mac *eth = (ethernet_mac*)packet;
 
         typedef struct libnet_ipv4_hdr ipv4_ip;
-        ipv4_ip *ip;
-        ip = (ipv4_ip*)(packet + sizeof(ethernet_mac));
+        ipv4_ip *ip = (ipv4_ip*)(packet + sizeof(ethernet_mac));
 
         typedef struct libnet_tcp_hdr tcp_port;
-        tcp_port *tcp;
-        tcp = (tcp_port*)(packet + ((*ip).ip_hl*4) + sizeof(ethernet_mac));
+        tcp_port *tcp = (tcp_port*)(packet + ((*ip).ip_hl*4) + sizeof(ethernet_mac));
 
         if ((ntohs((*eth).ether_type) == ETHERTYPE_IP)&&((*ip).ip_p == IPPROTO_TCP))
         {
@@ -58,12 +55,11 @@ int main(int argc, char* argv[]) {
             printf("Dst Port = %u\n", ntohs((*tcp).th_dport));
             printf("Src Port = %u\n", ntohs((*tcp).th_sport));
 
-            uint8_t data = ntohs((*ip).ip_len) - ((*ip).ip_hl*4) - ((*tcp).th_off*4);
+            int data = ntohs((*ip).ip_len) - ((*ip).ip_hl*4) - ((*tcp).th_off*4);
             const u_char *payload = packet + sizeof(ethernet_mac) + (*ip).ip_hl*4 + (*tcp).th_off*4;
-            for(int i=0; i<=data; i++){
+            int write_len = min(data , 16);
+            for(int i=0; i<write_len; i++){
                 printf(" %02x ", payload[i]);
-                if(i>=15)
-                    break;
             }
         }
     }
