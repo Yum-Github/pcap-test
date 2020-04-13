@@ -45,10 +45,10 @@ int main(int argc, char* argv[]) {
         {
             printf("\n\nDst mac = %02x : %02x : %02x : %02x : %02x : %02x\n",
                    (*eth).ether_dhost[0], (*eth).ether_dhost[1], (*eth).ether_dhost[2],
-                    (*eth).ether_dhost[3], (*eth).ether_dhost[4], (*eth).ether_dhost[5]);
+                   (*eth).ether_dhost[3], (*eth).ether_dhost[4], (*eth).ether_dhost[5]);
             printf("Src mac = %02x : %02x : %02x : %02x : %02x : %02x\n",
                    (*eth).ether_shost[0], (*eth).ether_shost[1], (*eth).ether_shost[2],
-                    (*eth).ether_shost[3], (*eth).ether_shost[4], (*eth).ether_shost[5]);
+                   (*eth).ether_shost[3], (*eth).ether_shost[4], (*eth).ether_shost[5]);
 
             printf("Dst IP = %u . %u . %u . %u\n",
                    (*ip).dst_IP[0], (*ip).dst_IP[1], (*ip).dst_IP[2], (*ip).dst_IP[3]);
@@ -60,9 +60,8 @@ int main(int argc, char* argv[]) {
 
             uint8_t data = ntohs((*ip).ip_len) - ((*ip).ip_hl*4) - ((*tcp).th_off*4);
             const u_char *payload = packet + sizeof(ethernet_mac) + (*ip).ip_hl*4 + (*tcp).th_off*4;
-            for(int i=1; i<=data; i++){
+            for(int i=0; i<=data; i++){
                 printf(" %02x ", payload[i]);
-                payload++;
                 if(i>=16)
                     break;
             }
